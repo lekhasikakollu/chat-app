@@ -8,14 +8,23 @@
 // 4. Test your work - Start the server and view the page in the browser
 
 const path = require('path');
-const express = require('express')
-const app = express()
+const http = require('http');
+const express = require('express');
+const socketio = require('socket.io');
+
+const app = express();
+const server = http.createServer(app); // Need this for socket io
+const io = socketio(server); //expects a HTTP server hence created one as above.
 
 const port = process.env.PORT || 3000;
 const publicDirectoryPath = path.join(__dirname, '../public');
 
 app.use(express.static(publicDirectoryPath));
 
-app.listen(port, ()=>{
+io.on('connection',() => {
+console.log('New websocket onnection established.')
+});
+
+server.listen(port, ()=>{
     console.log(`Server is starting up on port ${port}`);
 })
